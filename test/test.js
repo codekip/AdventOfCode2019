@@ -11,35 +11,77 @@ describe("Day 1a - caluclate fuel required", function() {
     assert.equal(fuel(12), 2);
   });
 
-  it("should 2 for mass of 14", function() {
+  it("should return 2 for a mass of 14", function() {
     assert.equal(fuel(14), 2);
   });
 
-  it("should 654 for mass of 1969", function() {
+  it("should return 654 for a mass of 1969", function() {
     assert.equal(fuel(1969), 654);
   });
 
-  it("should 33583 for mass of 100756", function() {
+  it("should return 33583 for a mass of 100756", function() {
     assert.equal(fuel(100756), 33583);
   });
 
-  it("should 18670 for mass of 56017", function() {
+  it("should return 18670 for a mass of 56017", function() {
     assert.equal(fuel(56017), 18670);
   });
 });
 
 describe("Day 1a - ANSWER", function() {
   it("Should return the total fuel required for given input", function() {
-    assert.equal(calculate_all(day_one_a), 3381405);
+    assert.equal(add(calculate_fuel(convert(day_one_a))), 3381405);
   });
 });
 
-function calculate_all(data) {
-  let all = split_input(data);
-  return all
-    .map(Number)
-    .map(x => fuel(x))
-    .reduce((x, y) => x + y);
+describe("Day 1b - calculate fuel required for a mass and its fuel", function() {
+  it("should return 2 for a mass of 14", function() {
+    assert.equal(multi(14), 2);
+  });
+  it("should return 1969 for a mass of 966", function() {
+    assert.equal(multi(1969), 966);
+  });
+  it("should return 100756 for a mass of 50346", function() {
+    assert.equal(multi(100756), 50346);
+  });
+});
+
+describe("Day 1b - ANSWER", function() {
+  it("Should return the grand total of fuel required", function() {
+    let input = convert(day_one_a);
+    let all = input.map(x => multi(x)).reduce((x, y) => x + y);
+    assert.equal(all, 5069241);
+  });
+});
+
+let ans = [];
+let s = 0;
+function multi(data) {
+  ans = [];
+  while (data > 0) {
+    s = fuel(data);
+    if (s > 0) {
+      ans.push(s);
+    }
+    data = s;
+  }
+  return ans.reduce((x, y) => x + y);
+}
+
+function convert(data) {
+  let a = split_input(data);
+  return to_number(a);
+}
+
+function to_number(data) {
+  return data.map(Number);
+}
+
+function calculate_fuel(lst) {
+  return lst.map(x => fuel(x));
+}
+function add(nums) {
+  return nums.reduce((x, y) => x + y);
 }
 
 function split_input(input) {
